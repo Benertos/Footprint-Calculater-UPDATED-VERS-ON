@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karbon Ayak İzi Testi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .card { max-width: 600px; margin: 40px auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background: white; padding: 2rem; }
+        h2 { color: #28a745; text-align: center; }
+        .btn-primary { background: #28a745; border: none; padding: 12px 30px; font-size: 1.2rem; border-radius: 50px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        {% if question.images %}
+        <div class="row justify-content-center mb-4">
+            {% for img in question.images %}
+            <div class="col-6 col-md-4 text-center">
+                <img src="{{ url_for('static', filename='images/' ~ img) }}" 
+                    class="img-fluid rounded" 
+                    style="max-height: 320px;">
+            </div>
+            {% endfor %}
+        </div>
+        {% elif question.image %}
+        <div class="text-center mb-4">
+            <img src="{{ url_for('static', filename='images/' ~ question.image) }}" 
+                class="img-fluid rounded" 
+                style="max-height: 160px;">
+        </div>
+        {% endif %}
+        
+        <h2 class="mb-4">{{ question.title }}</h2>
+
+        <form method="POST">
+            {% if question.multi %}
+                {% for opt in question.options %}
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" name="choice" value="{{ opt.value }}" id="opt{{ loop.index }}">
+                    <label class="form-check-label fs-5" for="opt{{ loop.index }}">
+                        {{ opt.label }}
+                    </label>
+                </div>
+                {% endfor %}
+            {% else %}
+                {% for opt in question.options %}
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="choice" value="{{ opt.value }}" id="opt{{ loop.index }}" required>
+                    <label class="form-check-label fs-5" for="opt{{ loop.index }}">
+                        {{ opt.label }}
+                    </label>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Devam Et</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
